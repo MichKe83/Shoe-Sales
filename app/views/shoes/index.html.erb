@@ -1,0 +1,32 @@
+<% if session[:user_id] %>
+		| <a href="/dashboard">Dashboard</a> 
+	
+	<% end %>
+
+<h2><%= @user.first_name.titleize %>!</h2>
+
+
+
+<table>
+	<thead>
+		<th>Product: |</th>
+		<th>Seller: |</th>
+		<th>Date Posted: |</th>
+		<th>Amont: |</th>
+		<th>Action/Status: </th>
+	</thead>
+	<% @shoes.each do |shoe| %>
+	<tr>  <% unless @transactions.include?(shoe.id) %>
+		<td><%= shoe.name %></td>
+		<td><%= shoe.user.first_name.titleize %> |</td>
+		<td><%= shoe.created_at %> |</td>
+		<td>$<%= shoe.amount %> | </td>
+		<td><a href="/shoes/<%= shoe.id %>" data-method="post">Buy</a></td>
+		
+		
+		
+		
+	</tr>
+	<% end %>
+	<% end %>
+</table>

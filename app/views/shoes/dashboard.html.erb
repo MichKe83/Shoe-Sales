@@ -1,0 +1,77 @@
+<h1>Hi <%= @user.first_name.titleize %></h1>
+
+<form action="/shoes" method="post">
+	 <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+Sell Product
+<p>Name:  <input type="text" name="name"> </p>
+<p>Amount:  <input type="int" name="amount"> </p>
+<input type="submit" name="submit" value="Sell">
+
+</form>
+<!-- products not yet sold -->
+<h3>Not Yet Sold</h3>
+<table> 
+	<thead>
+		<th>Product: |</th>
+		<th>Date Posted: |</th>
+		<th>Amount: |</th>
+		<th>Action: |</th>
+		<th> </th>
+	</thead>
+
+	<% @shoes.each do |shoe| %>
+		<tr><% if shoe.user.id == current_user.id %>
+			<% unless @transactions.include?(shoe.id) %>
+			<td><%= shoe.name %></td>
+			<td><%= shoe.created_at %></td>
+			<td>$<%= shoe.amount %></td>
+			<td><a href="/shoes/<%= shoe.id %>" data-method='delete'>Remove</a></td>
+			<% end %>
+			<% end %>
+		</tr>
+	<% end %>
+</table>
+<hr>
+<!-- Sales -->
+<h3>Sales</h3>
+<table>
+	<thead>
+		<th>Product: |</th>
+		<th>Date Bought: |</th>
+		<th>Buyer: |</th>
+		<th>Amount: |</th>
+	</thead>
+	<% @transactions.each do |transaction| %>
+		<tr>	<% if transaction.user.id != current_user.id %>	
+			<td><%= transaction.shoe.name %></td>
+			<td><%= transaction.created_at %></td>
+			<td><%= transaction.user.first_name.titleize %></td>
+			<td>$<%= transaction.shoe.amount %></td>		
+				<% end %>
+		</tr>
+	<% end %>
+</table>
+<h3>Total:</h3>
+<hr>
+<!-- Purchases -->
+<h3>Purchases</h3>
+<table>
+	<thead>
+		<th>Product: |</th>
+		<th>Date Bought: |</th>
+		<th>Seller: |</th>
+		<th>Amont: |</th>
+	</thead>
+
+	<% @transactions.each do |transaction| %>
+		<tr><% if transaction.user.id == current_user.id %>	
+			<td><%= transaction.shoe.name %></td>
+			<td><%= transaction.created_at %></td>
+			<td><%= transaction.user.first_name.titleize %></td>
+			<td>$<%= transaction.shoe.amount %></td>	
+			<% end %>	
+		</tr>
+	<% end %>
+</table>
+<h3>Total: 
+
